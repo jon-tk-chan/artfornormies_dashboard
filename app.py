@@ -1,7 +1,7 @@
 import streamlit as st
 import plotly.graph_objects as go
-import kaleido
-import plotly.express as px #if issue with plotly Figure().write_image() function: pip install -U kaleido
+# import kaleido
+# import plotly.express as px #if issue with plotly Figure().write_image() function: pip install -U kaleido
 from io import BytesIO
 
 #individual colors
@@ -195,14 +195,16 @@ fig = create_venn_2( venn_labels=[left_text, right_text, center_text],
 
 st.plotly_chart(fig)
 
-#add button to save file 
-buf = BytesIO()
-fig.write_image(buf, format="JPEG")
-byte_im = buf.getvalue()
-btn = st.download_button(
-      label="Download Image",
-      data=byte_im,
-      file_name="afn_plot.png",
-      mime="image/jpeg",
-      )
+### TO FIX: write_image() requires kaleido package, but unable to install on Streamlit Community Cloud
+
+# #add button to save file 
+# buf = BytesIO()
+# fig.write_image(buf, format="JPEG")
+# byte_im = buf.getvalue()
+# btn = st.download_button(
+#       label="Download Image",
+#       data=byte_im,
+#       file_name="afn_plot.png",
+#       mime="image/jpeg",
+#       )
 
