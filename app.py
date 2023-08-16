@@ -1,26 +1,7 @@
 import streamlit as st
-# import artfornormies.functions as art
 import plotly.graph_objects as go
 ### if issue with plotly Figure().write_image() function: pip install -U kaleido
 from io import BytesIO
-
-
-# #colorschemes for MARKERS
-# hk_redgreen = [[0, 'rgb(168,16,42)' ],
-#                  [0.5, 'rgb(255,255,255)'],
-#                 [1, "rgb(16,168,142)"]]
-
-# hk_redblue = [[0, 'rgb(168,16,42)' ],
-#                  [0.5, 'rgb(255,255,255)'],
-#                 [1, "rgb(16,118,168)"]]
-
-# hk_bluered = [[0, "rgb(16,118,168)" ],
-# #                  [0.5, 'rgb(255,255,255)'],
-#                 [1, 'rgb(168,16,42)']]
-
-# hk_greenred = [[0, "rgb(16,168,142)" ],
-#                  [0.5, 'rgb(255,255,255)'],
-#                 [1, 'rgb(168,16,42)']]
 
 #individual colors
 hk_red = 'rgb(168,16,42)' #A8102A
@@ -31,36 +12,26 @@ hk_red_light = "rgb(240, 125, 144)"
 hk_green_light = "rgb(123, 237, 218)"
 hk_blue_light = "rgb(126, 203, 242)"
 
-# hk_redgreen_l = [[0, hk_red_light ],
-#                  [0.5, 'rgb(255,255,255)'],
-#                 [1, hk_green_light]]
-
-# off_white='#e4dfce'
-# off_white="white"
-# off_black='#242424'
-
-# sand_823 = "#adab8b"
-# salmon_823 = "#ad8b8f"
-# blue_823 = "#8b93ad"
-
-# triad_1 = [sand_823, salmon_823, blue_823]
-
 data_font='Futura'
 title_font='Futura'
-
-# fig_width=1000
-# fig_height=1200
 
 anno_text_default = "Source: <i>https://github.com/jon-tk-chan</i><br><i>Instagram: @artfornormies</i>"
 
 #NEWLINED FUNCTION - for inserting breaks into text labels for graphs
 def newlined(input_string, max_line_len=12):
-    """Return a string with <br> added when one line reaches max_line_len in place of the next space
+    """Return a string with line breaks added when line length reaches max_line_len.
     
-    Use for individual plotly labels (especially with scatter)
+    This function is useful for formatting individual plotly labels, especially when
+    dealing with scatter plots.
+    
+    Args:
+        input_string (str): The input string to be formatted.
+        max_line_len (int, optional): The maximum desired line length before adding a line break.
+            Defaults to 12.
+    
+    Returns:
+        str: The formatted string with line breaks added.
     """
-#     input_split = input_string.split()
-#     print(input_split)
     
     curr_line_len = 0
     out_str = ""
@@ -79,14 +50,24 @@ def create_venn_2(venn_labels=["LEFT", "RIGHT","MID"], fill_venn=False,
                   left_color=hk_blue, right_color=hk_red, label_charlen=10,
                   main_title="VENN_TITLE",anno_text=anno_text_default,night_mode=False,
                   fig_width=1000, fig_height=1200, label_size=28):
-    """Returns a Plotly Figure of a 2-circle venn diagram with labels (left, right, middle itersection)
+    """Generate a Plotly Figure of a 2-circle Venn diagram with labeled regions.
     
-    Optional settings:
+    Args:
+        venn_labels (list): Labels for the Venn diagram regions [left, right, middle intersection].
+            Default is ["LEFT", "RIGHT", "MID"].
+        fill_venn (bool): Whether to fill Venn diagram regions with colors. Default is False.
+        left_color (str): Predefined color for the left Venn region. Default is hk_blue.
+        right_color (str): Predefined color for the right Venn region. Default is hk_red.
+        label_charlen (int): Maximum character length for each label. Default is 10.
+        main_title (str): Title for the Venn diagram figure. Default is "VENN_TITLE".
+        anno_text (str): Annotation text displayed below the Venn diagram. Default is anno_text_default.
+        night_mode (bool): Use night mode color scheme. Default is False.
+        fig_width (int): Width of the figure in pixels. Default is 1000.
+        fig_height (int): Height of the figure in pixels. Default is 1200.
+        label_size (int): Font size for the labels. Default is 28.
     
-    text_size: int
-    left_color = predefined color (str)
-    right_color = predefined color (str)
-    night_mode: boolean
+    Returns:
+        go.Figure: A Plotly Figure containing the 2-circle Venn diagram.
     """
     title_size = 32 #not referenced?
     # label_size = 30
@@ -118,7 +99,6 @@ def create_venn_2(venn_labels=["LEFT", "RIGHT","MID"], fill_venn=False,
         "y": [1,1,1],
             "text": [newlined(venn_labels[0], label_charlen), newlined(venn_labels[2],label_charlen),newlined(venn_labels[1],label_charlen)]
     }
-#     print(data_dict['text'])
     fig = go.Figure()
 
     ### ADD VENN DIAGRAMS
@@ -174,41 +154,27 @@ def create_venn_2(venn_labels=["LEFT", "RIGHT","MID"], fill_venn=False,
 
     return fig
 
-
-
-
-
-
-
-
-###### DEFAULT HEADER #######
+###### START DASHBOARD CODE - DEFAULT HEADER #######
 st.header("Artfornormies - dashboard test")
 st.markdown("""
-    Test making a deployable dashboard that allows you to write venn diagram things 
+    Dashboard for creating venn diagram reminders using data visualization packages by Jonathan Chan (github: jon-tk-chan).
+
+    Use for creating static images for social media reminders, to remind yourself that two things can be true at once. 
+    
+    Inspired by the [Collab Fund article](https://collabfund.com/blog/true-at-once/) - "Two Things Can Be True At Once" by Morgan Housel.  
 """)
             
-###### INPUTS IN FORM #####       
+###### INPUTS IN FORM - two columns #####       
 col1, col2 = st.columns(2)  
 with col1:
     with st.form('Form1'):        
-        left_text = st.text_input("left text", value='LEFT')
-        right_text= st.text_input("right side text", "RIGHT")
-        center_text = st.text_input("center text", value='CENTER')
-        title_text = st.text_input("title text:", value="MAIN TITLE")
-        # max_text_width = st.slider(label='select max length of text line (char):', 
-        #                         min_value=0, max_value=50, value = 10)
-        # image_dims = st.select_slider('select edge length and width (px): ', 
-        #                             options=[500, 600, 700, 800, 900, 1000, 1100, 1200],
-        #                             value=700)
-        # lab_size = st.slider('select label font size:',
-        #                     min_value=8, max_value=50,value=28)
+        left_text = st.text_input("left text:", value='LEFT')
+        right_text= st.text_input("right side text:", "RIGHT")
+        center_text = st.text_input("center text:", value='CENTER')
+        title_text = st.text_input("title text:", value="")
         submitted = st.form_submit_button('Submit')
-
 with col2:
     with st.form('Form2'):        
-        # left_text = st.text_input("left text", value='LEFT')
-        # right_text= st.text_input("right side text", "RIGHT")
-        # center_text = st.text_input("center text", value='CENTER')
         max_text_width = st.slider(label='select max length of text line (char):', 
                                 min_value=0, max_value=50, value = 10)
         image_dims = st.select_slider('select edge length and width (px): ', 
@@ -216,36 +182,26 @@ with col2:
                                     value=700)
         lab_size = st.slider('select label font size:',
                             min_value=8, max_value=50,value=28)
-        st.markdown('###### \n ####') #used to align spacing for 
+        st.markdown('###### \n ####') #used to align st.columns() heights
         submitted = st.form_submit_button('Submit')
 
-
-
-# st.write(submitted)
-# st.write(f"LEFT TEXT: {left_text}")
-# st.write(f"RIGHT TEXT: {right_text}")
-# st.write(f"CENTER TEXT: {center_text}")
-
-
-
-
+#CREATE AND DISPLAY FIGURE BASED ON INPUTS FROM Form1 and Form2       
 fig = create_venn_2( venn_labels=[left_text, right_text, center_text], 
                         night_mode=True, fill_venn=True, 
                         label_charlen=max_text_width,
                         main_title=title_text, fig_width=image_dims, fig_height=image_dims,
                         label_size=lab_size)
-#pass any Plotly updates as you would with any Plotly figure - add to artfornormies functions later?
-# fig.update_layout(width=image_dims, height=image_dims)
 
+st.plotly_chart(fig)
 
+#add button to save file 
 buf = BytesIO()
 fig.write_image(buf, format="JPEG")
 byte_im = buf.getvalue()
 btn = st.download_button(
       label="Download Image",
       data=byte_im,
-      file_name="imagename.png",
+      file_name="afn_plot.png",
       mime="image/jpeg",
       )
 
-st.plotly_chart(fig)
