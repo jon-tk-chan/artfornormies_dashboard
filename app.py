@@ -1,5 +1,6 @@
 import streamlit as st
 import plotly.graph_objects as go
+import kaleido
 import plotly.express as px #if issue with plotly Figure().write_image() function: pip install -U kaleido
 from io import BytesIO
 
