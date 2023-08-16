@@ -5,3 +5,4 @@ Deployed to Streamlit Community - interact with dashboard [here](https://artforn
 To Do:
 - add dynamic file name for output images
 - add button to output data as JSON
+- Fix save button for static images (kaleido import issue)
