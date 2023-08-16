@@ -1,6 +1,6 @@
 import streamlit as st
 import plotly.graph_objects as go
-### if issue with plotly Figure().write_image() function: pip install -U kaleido
+import kaleido #if issue with plotly Figure().write_image() function: pip install -U kaleido
 from io import BytesIO
 
 #individual colors
