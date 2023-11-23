@@ -4,14 +4,44 @@ import plotly.graph_objects as go
 # import plotly.express as px #if issue with plotly Figure().write_image() function: pip install -U kaleido
 from io import BytesIO
 
-#individual colors
-hk_red = 'rgb(168,16,42)' #A8102A
-hk_green = 'rgb(16,168,142)' #7bedda
-hk_blue = 'rgb(16,118,168)'
+# Colors were selected using imagecolorpicker.com
+#colors are from selected photos from Greg Girard's photography work: https://bluelotus-gallery.com/#/greg-girard/
+ggBeige = '#c8a398'
+ggBlack = '#18171a'
+ggBrownLight = '#78554e'
+ggGreenLight = '#73a8a8'
+ggGreenDark = '#466863'
+ggRedDark = '#b2263f'
+ggRedLight = '#f39591'
+ggBrownDark = '#4e3832'
+ggBlueLight = '#597f9e'
+ggBlueDark = '#485061'
 
-hk_red_light = "rgb(240, 125, 144)"
-hk_green_light = "rgb(123, 237, 218)"
-hk_blue_light = "rgb(126, 203, 242)"
+hk_red = "#A8102A"
+hk_green = '#7bedda'
+hk_blue = '#1076a8'
+
+hk_pm = [ggBeige, ggBlack, ggBrownLight, ggGreenLight, ggGreenDark, ggRedDark, ggRedLight, ggBrownDark, ggBlueLight, ggBlueDark]
+color_combos = {
+    "brownBlack": [ggBrownLight, ggBlack],
+    "pinkGreen": [ggRedLight, ggGreenDark],
+    "pinkRed":[ggRedLight, ggRedDark],
+    # "blueBlue":[ggBlueLight, ggBlueDark],
+    "blueGreen" : [ggBlueLight, ggGreenDark],
+    "blueRed" :[ggBlueLight,ggRedDark],
+    "beigeBrown": [ggBeige, ggBrownDark],
+    "blueRed_TAXI":[hk_red, hk_blue],
+ }
+#individual colors
+# hk_red = 'rgb(168,16,42)' # #A8102A
+# hk_green = 'rgb(16,168,142)' # #7bedda
+# hk_blue = 'rgb(16,118,168)' # #1076a8
+
+# hk_red_light = "rgb(240, 125, 144)"
+# hk_green_light = "rgb(123, 237, 218)"
+# hk_blue_light = "rgb(126, 203, 242)"
+
+
 
 data_font='Futura'
 title_font='Futura'
@@ -48,7 +78,9 @@ def newlined(input_string, max_line_len=12):
 
 
 def create_venn_2(venn_labels=["LEFT", "RIGHT","MID"], fill_venn=False, 
-                  left_color=hk_blue, right_color=hk_red, label_charlen=10,
+                  left_color=hk_blue, right_color=hk_red, opacity_val = 0.5,
+                  label_charlen=10,
+
                   main_title="VENN_TITLE",anno_text=anno_text_default,night_mode=False,
                   fig_width=1000, fig_height=1200, label_size=28):
     """Generate a Plotly Figure of a 2-circle Venn diagram with labeled regions.
@@ -77,14 +109,14 @@ def create_venn_2(venn_labels=["LEFT", "RIGHT","MID"], fill_venn=False,
         outline_color="black"
         font_color="black"
         bg_color="white"
-        opacity_val = 0.25
+        # opacity_val = 0.25
         line_color="black"
        
     else:
         outline_color="white"
         font_color="white"
         bg_color="black"
-        opacity_val = 0.7
+        # opacity_val = 0.7
         line_color="white"
         
     if not fill_venn:
@@ -166,7 +198,7 @@ st.markdown("""
 """)
             
 ###### INPUTS IN FORM - two columns #####       
-col1, col2 = st.columns(2)  
+col1, col2, col3 = st.columns(3)  
 with col1:
     with st.form('Form1'):        
         left_text = st.text_input("left text:", value='LEFT')
@@ -175,7 +207,16 @@ with col1:
         title_text = st.text_input("title text:", value="")
         submitted = st.form_submit_button('Submit')
 with col2:
-    with st.form('Form2'):        
+    with st.form('Form2'):   
+        # color_left = st.color_picker('Pick A Color', ggBeige)
+        # color_right = st.color_picker('Pick A Color', ggBlack)  
+        # color_left = st.selectbox("Pick a fill color for left venn diagram (behind)",
+        #                           options = hk_pm, index = 5)
+        # color_right = st.selectbox("Pick a fill color for right venn diagram (front)",
+        #                           hk_pm, index=9)
+        color_key = st.selectbox("Select fill colors:", color_combos.keys(), index=6)
+        opacity_val = st.slider(label='select an opacity value:', 
+                                min_value=0.0, max_value=1.0, value = 0.7)
         max_text_width = st.slider(label='select max length of text line (char):', 
                                 min_value=0, max_value=50, value = 10)
         image_dims = st.select_slider('select edge length and width (px): ', 
@@ -186,14 +227,18 @@ with col2:
         st.markdown('###### \n ####') #used to align st.columns() heights
         submitted = st.form_submit_button('Submit')
 
-#CREATE AND DISPLAY FIGURE BASED ON INPUTS FROM Form1 and Form2       
-fig = create_venn_2( venn_labels=[left_text, right_text, center_text], 
-                        night_mode=True, fill_venn=True, 
-                        label_charlen=max_text_width,
-                        main_title=title_text, fig_width=image_dims, fig_height=image_dims,
-                        label_size=lab_size)
+#CREATE AND DISPLAY FIGURE BASED ON INPUTS FROM Form1 and Form2 
+color_left = color_combos[color_key][0]
+color_right = color_combos[color_key][1]
+with col3:
+    fig = create_venn_2( venn_labels=[left_text, right_text, center_text], 
+                            night_mode=True, fill_venn=True,
+                            left_color=color_left, right_color=color_right, opacity_val=opacity_val,
+                            label_charlen=max_text_width,
+                            main_title=title_text, fig_width=image_dims, fig_height=image_dims,
+                            label_size=lab_size)
 
-st.plotly_chart(fig)
+    st.plotly_chart(fig)
 
 ### TO FIX: write_image() requires kaleido package, but unable to install on Streamlit Community Cloud
 
