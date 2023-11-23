@@ -41,8 +41,6 @@ color_combos = {
 # hk_green_light = "rgb(123, 237, 218)"
 # hk_blue_light = "rgb(126, 203, 242)"
 
-
-
 data_font='Futura'
 title_font='Futura'
 
@@ -196,49 +194,91 @@ st.markdown("""
     
     Inspired by the [Collab Fund article](https://collabfund.com/blog/true-at-once/) - "Two Things Can Be True At Once" by Morgan Housel.  
 """)
-            
-###### INPUTS IN FORM - two columns #####       
-col1, col2, col3 = st.columns(3)  
-with col1:
-    with st.form('Form1'):        
-        left_text = st.text_input("left text:", value='LEFT')
-        right_text= st.text_input("right side text:", "RIGHT")
-        center_text = st.text_input("center text:", value='CENTER')
-        title_text = st.text_input("title text:", value="")
-        submitted = st.form_submit_button('Submit')
-with col2:
-    with st.form('Form2'):   
-        # color_left = st.color_picker('Pick A Color', ggBeige)
-        # color_right = st.color_picker('Pick A Color', ggBlack)  
-        # color_left = st.selectbox("Pick a fill color for left venn diagram (behind)",
-        #                           options = hk_pm, index = 5)
-        # color_right = st.selectbox("Pick a fill color for right venn diagram (front)",
-        #                           hk_pm, index=9)
-        color_key = st.selectbox("Select fill colors:", color_combos.keys(), index=6)
-        opacity_val = st.slider(label='select an opacity value:', 
-                                min_value=0.0, max_value=1.0, value = 0.7)
-        max_text_width = st.slider(label='select max length of text line (char):', 
-                                min_value=0, max_value=50, value = 10)
-        image_dims = st.select_slider('select edge length and width (px): ', 
-                                    options=[500, 600, 700, 800, 900, 1000, 1100, 1200],
-                                    value=700)
-        lab_size = st.slider('select label font size:',
-                            min_value=8, max_value=50,value=28)
-        st.markdown('###### \n ####') #used to align st.columns() heights
-        submitted = st.form_submit_button('Submit')
+#### SIDEBAR VERSION
 
-#CREATE AND DISPLAY FIGURE BASED ON INPUTS FROM Form1 and Form2 
+with st.sidebar:
+    st.markdown("# MAIN INPUTS")
+    left_text = st.text_input("left text:", value='LEFT')
+    right_text= st.text_input("right side text:", "RIGHT")
+    center_text = st.text_input("center text:", value='CENTER')
+    color_key = st.selectbox("Select fill colors:", color_combos.keys(), index=5)
+    st.text("") #spacer
+    st.markdown("# OPTIONAL INPUTS")
+    title_text = st.text_input("title text:", value="")
+    opacity_val = st.slider(label='select an opacity value:', 
+                            min_value=0.0, max_value=1.0, value = 0.7)
+    max_text_width = st.slider(label='select max length of text line (char):', 
+                            min_value=0, max_value=50, value = 10)
+    image_dims = st.select_slider('select edge length and width (px): ', 
+                                options=[500, 600, 700, 800, 900, 1000, 1100, 1200],
+                                value=700)
+    lab_size = st.slider('select label font size:',
+                        min_value=8, max_value=50,value=28)
+        
 color_left = color_combos[color_key][0]
 color_right = color_combos[color_key][1]
-with col3:
-    fig = create_venn_2( venn_labels=[left_text, right_text, center_text], 
-                            night_mode=True, fill_venn=True,
-                            left_color=color_left, right_color=color_right, opacity_val=opacity_val,
-                            label_charlen=max_text_width,
-                            main_title=title_text, fig_width=image_dims, fig_height=image_dims,
-                            label_size=lab_size)
 
-    st.plotly_chart(fig)
+fig = create_venn_2( venn_labels=[left_text, right_text, center_text], 
+                        night_mode=True, fill_venn=True,
+                        left_color=color_left, right_color=color_right, opacity_val=opacity_val,
+                        label_charlen=max_text_width,
+                        main_title=title_text, fig_width=image_dims, fig_height=image_dims,
+                        label_size=lab_size)
+#display graph
+st.plotly_chart(fig)
+
+#save image button
+fig_img = fig.to_image(format='png')
+btn = st.download_button(
+        label="Download image",
+        data=fig_img,
+        file_name="artfornormies_venn.png",
+        mime="image/png"
+        )
+
+#### COLUMN VERSION - OUTDATED    
+# ###### INPUTS IN FORM - two columns #####       
+# col1, col2, col3 = st.columns(3)  
+# with col1:
+#     with st.form('Form1'):        
+#         left_text = st.text_input("left text:", value='LEFT')
+#         right_text= st.text_input("right side text:", "RIGHT")
+#         center_text = st.text_input("center text:", value='CENTER')
+#         title_text = st.text_input("title text:", value="")
+#         submitted = st.form_submit_button('Submit')
+# with col2:
+#     with st.form('Form2'):   
+#         # color_left = st.color_picker('Pick A Color', ggBeige)
+#         # color_right = st.color_picker('Pick A Color', ggBlack)  
+#         # color_left = st.selectbox("Pick a fill color for left venn diagram (behind)",
+#         #                           options = hk_pm, index = 5)
+#         # color_right = st.selectbox("Pick a fill color for right venn diagram (front)",
+#         #                           hk_pm, index=9)
+#         color_key = st.selectbox("Select fill colors:", color_combos.keys(), index=6)
+#         opacity_val = st.slider(label='select an opacity value:', 
+#                                 min_value=0.0, max_value=1.0, value = 0.7)
+#         max_text_width = st.slider(label='select max length of text line (char):', 
+#                                 min_value=0, max_value=50, value = 10)
+#         image_dims = st.select_slider('select edge length and width (px): ', 
+#                                     options=[500, 600, 700, 800, 900, 1000, 1100, 1200],
+#                                     value=700)
+#         lab_size = st.slider('select label font size:',
+#                             min_value=8, max_value=50,value=28)
+#         st.markdown('###### \n ####') #used to align st.columns() heights
+#         submitted = st.form_submit_button('Submit')
+
+# #CREATE AND DISPLAY FIGURE BASED ON INPUTS FROM Form1 and Form2 
+# color_left = color_combos[color_key][0]
+# color_right = color_combos[color_key][1]
+# with col3:
+#     fig = create_venn_2( venn_labels=[left_text, right_text, center_text], 
+#                             night_mode=True, fill_venn=True,
+#                             left_color=color_left, right_color=color_right, opacity_val=opacity_val,
+#                             label_charlen=max_text_width,
+#                             main_title=title_text, fig_width=image_dims, fig_height=image_dims,
+#                             label_size=lab_size)
+
+#     st.plotly_chart(fig)
 
 ### TO FIX: write_image() requires kaleido package, but unable to install on Streamlit Community Cloud
 
