@@ -1,7 +1,5 @@
 import streamlit as st
 import plotly.graph_objects as go
-# import kaleido
-# import plotly.express as px #if issue with plotly Figure().write_image() function: pip install -U kaleido
 from io import BytesIO
 
 # Colors were selected using imagecolorpicker.com
@@ -184,20 +182,21 @@ def create_venn_2(venn_labels=["LEFT", "RIGHT","MID"], fill_venn=False,
     return fig
 
 ###### START DASHBOARD CODE - DEFAULT HEADER #######
-st.header("Artfornormies - dashboard test")
-st.markdown("""
-    Dashboard for creating venn diagram reminders using data visualization packages by Jonathan Chan (github: jon-tk-chan).
+st.markdown("## Two Things Can Be True - Venn Diagram Maker")
+st.markdown("##### Instagram: @artfornormies")
+st.markdown("""     
+    *Scroll down and press the 'Download image' button to save your venn diagram image in PNG format.* 
+            
+    Dashboard for creating venn diagrams and exporting images for social media/personal use. Intended uses include making mental health reminders for content creation (social media posts, blog post headers, etc) OR for personal use (phone wallpapers).
 
-    Use for creating static images for social media reminders, to remind yourself that two things can be true at once. 
-    
-    Inspired by the [Collab Fund article](https://collabfund.com/blog/true-at-once/) - "Two Things Can Be True At Once" by Morgan Housel. 
-
-    Color palettes are inspired by the photography work of [Greg Girard](https://bluelotus-gallery.com/#/greg-girard/).
 """)
+
 #### SIDEBAR VERSION
 
 with st.sidebar:
+    st.markdown("*please hit 'enter' to apply input changes*")
     st.markdown("# MAIN INPUTS")
+    
     left_text = st.text_input("left text:", value='LEFT')
     right_text= st.text_input("right side text:", "RIGHT")
     center_text = st.text_input("center text:", value='CENTER')
@@ -234,3 +233,13 @@ btn = st.download_button(
         file_name="artfornormies_venn.png",
         mime="image/png"
         )
+st.markdown("""
+    ##### References
+            
+Inspired by the [Collab Fund article](https://collabfund.com/blog/true-at-once/) - "Two Things Can Be True At Once" by Morgan Housel. Fill color palettes are inspired by the photography work of [Greg Girard](https://bluelotus-gallery.com/#/greg-girard/).
+- Data visualizations: [Plotly - Python](https://plotly.com/python/) 
+- Dashboard inteface: [Streamlit](https://docs.streamlit.io/) / [Streamlit Community Cloud](https://streamlit.io/cloud)
+
+*Designed by Jonathan Chan: [Github](https://github.com/jon-tk-chan) / [Website](https://www.jonathantkchan.com/)*
+            
+""")
